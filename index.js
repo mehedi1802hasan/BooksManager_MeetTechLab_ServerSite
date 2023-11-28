@@ -2,7 +2,7 @@ const express =require ('express');
 const cors = require ('cors');
 const app=express();
 const port = process.env.PORT || 3000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 
 // middleware
@@ -60,6 +60,59 @@ app.post('/books',async(req,res)=>{
 
 
 });
+
+
+/// update the book information
+app.put('/books/:id', async (req, res) => {
+  const id = req.params.id;
+  const body = req.body;
+  const filter = { _id: new ObjectId(id) };
+  const updateDoc = {
+    $set: {
+      name: body.name,
+      author: body.author,
+      description: body.description,
+      image: body.image,
+    },
+  };
+  const result = await booksCollections.updateOne(filter, updateDoc);
+  console.log(result)
+  res.send(result);
+});
+
+///delete the spacypic book 
+app.delete('/books/:id',async(req,res)=>{
+  const id = req.params.id;
+      const query = { _id: new ObjectId(id)};
+      const result = await booksCollections.deleteOne(query);
+    console.log(result)
+      res.send(result);
+ })
+
+ //searching books 
+ app.get('/books/:text', async (req, res) => {
+  try {
+    const searchText = req.params.text;
+    console.log('Search Text:', searchText); // Add this line for debugging
+    const result = await booksCollections
+      .find({
+        $or: [
+          { author: { $regex: searchText, $options: 'i' } },
+          { name: { $regex: searchText, $options: 'i' } },
+        ],
+
+      })
+      .toArray();
+    res.send(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
