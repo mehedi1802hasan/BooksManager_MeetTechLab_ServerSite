@@ -1,9 +1,11 @@
 const express =require ('express');
 const cors = require ('cors');
 const app=express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 2000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
+
+
 
 // middleware
 app.use(express.json());
@@ -46,7 +48,7 @@ app.post('/books',async(req,res)=>{
 
  // ---------get id ways Book--------
  
- app.get('/books/:id',async (req,res)=>{
+ app.get('/details/:id',async (req,res)=>{
   const id=req.params.id.toString();
   console.log(id)
   const query ={_id: new ObjectId(id)} ;
