@@ -29,7 +29,7 @@ async function run() {
 const booksCollections = client.db('BooksMeetTechLab').collection('books')
 const usersCollection = client.db("BooksMeetTechLab").collection("users");
 
-// Post  the book
+// ---------Post  the book----------
 
 app.post('/books',async(req,res)=>{
   const addbook=req.body;
@@ -37,14 +37,17 @@ app.post('/books',async(req,res)=>{
   res.send(result);
 })
 
-// get the all books 
+// -------get the all books ----------
  app.get('/books',async(req,res)=>{
     const result =await booksCollections.find().toArray();
     res.send(result);
     console.log(result)
  })
 
- // new user post 
+ // ---------get id ways Book--------
+ 
+
+ // ----------new user post(AuthenTication) ---------------
  app.post('/users', async (req, res) => {
 
   const user = req.body;
@@ -62,7 +65,7 @@ app.post('/books',async(req,res)=>{
 });
 
 
-/// update the book information
+///-------- update the book information-------
 app.put('/books/:id', async (req, res) => {
   const id = req.params.id;
   const body = req.body;
@@ -80,7 +83,7 @@ app.put('/books/:id', async (req, res) => {
   res.send(result);
 });
 
-///delete the spacypic book 
+///----------delete the spacypic book -------------
 app.delete('/books/:id',async(req,res)=>{
   const id = req.params.id;
       const query = { _id: new ObjectId(id)};
@@ -89,7 +92,7 @@ app.delete('/books/:id',async(req,res)=>{
       res.send(result);
  })
 
- //searching books 
+ //--------searching books by author name and Title--(title means name) -------
  app.get('/books/:text', async (req, res) => {
   try {
     const searchText = req.params.text;
